@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, BookA } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, BookA, Star, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
