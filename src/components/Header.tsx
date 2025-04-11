@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, BookA, Star, MessageCircle } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, Star, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
@@ -18,11 +18,22 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
+  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+} from "@/components/ui/menubar";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -123,64 +134,80 @@ const Header = () => {
 
         {/* Navigation pour desktop avec menu de catégories */}
         <nav className="hidden md:flex items-center space-x-4">
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  Catégories <ChevronDown className="h-4 w-4" />
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-background">
-                  <div className="grid grid-cols-2 w-[800px] gap-0">
-                    <div className="border-r">
-                      <ul className="p-2 space-y-1">
-                        {categories.map((category, index) => (
-                          <li key={index} className="hover:bg-accent rounded-md transition-colors">
-                            <NavigationMenuLink asChild>
-                              <a href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center justify-between px-3 py-2 text-sm">
-                                {category.name}
-                                {category.subcategories.length > 0 && <ChevronDown className="h-4 w-4" />}
-                              </a>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <ul className="p-4 space-y-3">
-                        {popularSubcategories.map((subcat, index) => (
-                          <li key={index}>
+          {/* Menu avec sous-menus */}
+          <Menubar className="border-none bg-transparent p-0">
+            <MenubarMenu>
+              <MenubarTrigger className="font-medium text-sm hover:text-primary transition-colors">
+                Catégories <ChevronDown className="h-4 w-4 ml-1" />
+              </MenubarTrigger>
+              <MenubarContent className="bg-background min-w-[220px]">
+                {categories.map((category, index) => (
+                  category.subcategories.length > 0 ? (
+                    <MenubarSub key={index}>
+                      <MenubarSubTrigger className="cursor-pointer">
+                        {category.name}
+                      </MenubarSubTrigger>
+                      <MenubarSubContent className="bg-background min-w-[220px]">
+                        {category.subcategories.map((subcat, subIndex) => (
+                          <MenubarItem key={subIndex}>
                             <a 
-                              href={`/category/${subcat.name.toLowerCase().replace(/\s+/g, '-')}`} 
-                              className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/50 transition-colors"
+                              href={`/category/${subcat.toLowerCase().replace(/\s+/g, '-')}`}
+                              className="w-full block"
                             >
-                              <span className="bg-accent p-2 rounded-md">
-                                {subcat.icon}
-                              </span>
-                              <span>{subcat.name}</span>
+                              {subcat}
                             </a>
-                          </li>
+                          </MenubarItem>
                         ))}
-                      </ul>
-                    </div>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <a href="#apropos" className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors px-3 py-2">
-                  <BookOpen size={18} />
-                  <span>À propos</span>
-                </a>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <a href="#contact" className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors px-3 py-2">
-                  <Mail size={18} />
-                  <span>Contact</span>
-                </a>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+                      </MenubarSubContent>
+                    </MenubarSub>
+                  ) : (
+                    <MenubarItem key={index}>
+                      <a 
+                        href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+                        className="w-full block"
+                      >
+                        {category.name}
+                      </a>
+                    </MenubarItem>
+                  )
+                ))}
+              </MenubarContent>
+            </MenubarMenu>
+            
+            <MenubarMenu>
+              <MenubarTrigger className="font-medium text-sm hover:text-primary transition-colors">
+                À propos
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>
+                  <a href="#about-us" className="w-full block">Notre histoire</a>
+                </MenubarItem>
+                <MenubarItem>
+                  <a href="#team" className="w-full block">Notre équipe</a>
+                </MenubarItem>
+                <MenubarItem>
+                  <a href="#mission" className="w-full block">Notre mission</a>
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+            
+            <MenubarMenu>
+              <MenubarTrigger className="font-medium text-sm hover:text-primary transition-colors">
+                Contact
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>
+                  <a href="#contact-form" className="w-full block">Formulaire de contact</a>
+                </MenubarItem>
+                <MenubarItem>
+                  <a href="#support" className="w-full block">Support client</a>
+                </MenubarItem>
+                <MenubarItem>
+                  <a href="#faq" className="w-full block">FAQ</a>
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
           
           {/* Icônes e-commerce */}
           <div className="flex items-center space-x-4 ml-4">
@@ -261,45 +288,55 @@ const Header = () => {
             </form>
             
             {/* Menu navigation mobile */}
-            <div className="border p-2 rounded-md">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="w-full flex justify-between items-center">
-                    <span className="flex items-center gap-2">
-                      <ChevronDown size={16} />
-                      <span>Catégories</span>
-                    </span>
+            <div className="space-y-4">
+              {categories.map((category, index) => (
+                <div key={index} className="border rounded-md">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full flex justify-between items-center text-left font-normal"
+                    onClick={() => {
+                      const elem = document.getElementById(`mobile-category-${index}`);
+                      if (elem) {
+                        elem.classList.toggle('hidden');
+                      }
+                    }}
+                  >
+                    <span>{category.name}</span>
+                    <ChevronDown size={16} />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  {categories.map((category, index) => (
-                    <DropdownMenuItem key={index}>
-                      <a href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="w-full">
-                        {category.name}
-                      </a>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  
+                  {category.subcategories.length > 0 && (
+                    <div id={`mobile-category-${index}`} className="hidden px-4 py-2 space-y-2">
+                      {category.subcategories.map((subcat, subIndex) => (
+                        <a 
+                          key={subIndex} 
+                          href={`/category/${subcat.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="block py-1 text-sm hover:text-primary transition-colors"
+                        >
+                          {subcat}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              <a 
+                href="#apropos" 
+                className="block text-sm font-medium py-2 hover:text-primary transition-colors"
+                onClick={toggleMenu}
+              >
+                À propos
+              </a>
+              
+              <a 
+                href="#contact" 
+                className="block text-sm font-medium py-2 hover:text-primary transition-colors"
+                onClick={toggleMenu}
+              >
+                Contact
+              </a>
             </div>
-            
-            <a 
-              href="#apropos" 
-              className="text-sm font-medium py-2 hover:text-primary transition-colors flex items-center gap-2"
-              onClick={toggleMenu}
-            >
-              <BookOpen size={18} />
-              <span>À propos</span>
-            </a>
-            
-            <a 
-              href="#contact" 
-              className="text-sm font-medium py-2 hover:text-primary transition-colors flex items-center gap-2"
-              onClick={toggleMenu}
-            >
-              <Mail size={18} />
-              <span>Contact</span>
-            </a>
             
             {/* Options e-commerce pour mobile */}
             <div className="flex justify-between items-center pt-2 border-t">
