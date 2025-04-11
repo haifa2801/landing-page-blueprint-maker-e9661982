@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Star } from 'lucide-react';
+import { Star, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const testimonials = [
   {
@@ -31,7 +32,10 @@ const TestimonialsSection = () => {
         <h2 className="section-title">Ce que nos clients disent</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="border-none shadow-md">
+            <Card 
+              key={index} 
+              className="border-none shadow-md transition-all hover:shadow-lg hover:translate-y-[-5px] duration-300"
+            >
               <CardContent className="p-6 space-y-4">
                 <div className="flex">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -46,6 +50,13 @@ const TestimonialsSection = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        
+        <div className="mt-12 text-center">
+          <Button variant="outline" size="lg" className="group">
+            Voir plus de témoignages
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
         </div>
       </div>
     </section>

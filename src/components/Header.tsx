@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, BookA } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
@@ -74,8 +74,32 @@ const Header = () => {
     }
   ];
 
+  // Définition des sous-catégories populaires avec leurs icônes
+  const popularSubcategories = [
+    {
+      name: "Personal Development",
+      icon: <BookOpen className="h-5 w-5" />,
+    },
+    {
+      name: "Productivity",
+      icon: <Bookmark className="h-5 w-5" />,
+    },
+    {
+      name: "Motivation & Inspiration",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      name: "Communication Skills",
+      icon: <MessageCircle className="h-5 w-5" />,
+    },
+    {
+      name: "Biography & Memoir",
+      icon: <Book className="h-5 w-5" />,
+    },
+  ];
+
   return (
-    <header className="py-4 border-b">
+    <header className="py-4 border-b sticky top-0 bg-background z-40">
       <div className="container flex items-center justify-between">
         <a href="/" className="flex items-center">
           <span className="text-xl font-bold text-primary">BOOKLY</span>
@@ -110,9 +134,9 @@ const Header = () => {
                     <div className="border-r">
                       <ul className="p-2 space-y-1">
                         {categories.map((category, index) => (
-                          <li key={index} className="hover:bg-accent rounded-md">
+                          <li key={index} className="hover:bg-accent rounded-md transition-colors">
                             <NavigationMenuLink asChild>
-                              <a href="#" className="flex items-center justify-between px-3 py-2 text-sm">
+                              <a href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center justify-between px-3 py-2 text-sm">
                                 {category.name}
                                 {category.subcategories.length > 0 && <ChevronDown className="h-4 w-4" />}
                               </a>
@@ -123,59 +147,19 @@ const Header = () => {
                     </div>
                     <div>
                       <ul className="p-4 space-y-3">
-                        <li>
-                          <a href="#" className="flex items-center gap-3">
-                            <span className="bg-accent p-2 rounded-md">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="m2 7 5 3 5-6 5 6 5-3v8l-5 3-5-6-5 6-5-3z" />
-                              </svg>
-                            </span>
-                            <span>Personal Development</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="flex items-center gap-3">
-                            <span className="bg-accent p-2 rounded-md">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M10 2v8L5 8l5 8v4" />
-                                <path d="M14 2v4l5 8-5 2v8" />
-                              </svg>
-                            </span>
-                            <span>Productivity</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="flex items-center gap-3">
-                            <span className="bg-accent p-2 rounded-md">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M12 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16z" />
-                                <path d="M12 8v4l2 2" />
-                              </svg>
-                            </span>
-                            <span>Motivation & Inspiration</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="flex items-center gap-3">
-                            <span className="bg-accent p-2 rounded-md">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                              </svg>
-                            </span>
-                            <span>Communication Skills</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="flex items-center gap-3">
-                            <span className="bg-accent p-2 rounded-md">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                              </svg>
-                            </span>
-                            <span>Biography & Memoir</span>
-                          </a>
-                        </li>
+                        {popularSubcategories.map((subcat, index) => (
+                          <li key={index}>
+                            <a 
+                              href={`/category/${subcat.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                              className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/50 transition-colors"
+                            >
+                              <span className="bg-accent p-2 rounded-md">
+                                {subcat.icon}
+                              </span>
+                              <span>{subcat.name}</span>
+                            </a>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -203,7 +187,7 @@ const Header = () => {
             {/* Dropdown de l'utilisateur */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button variant="ghost" size="icon" className="rounded-full hover:bg-accent/50">
                   <User size={20} />
                 </Button>
               </DropdownMenuTrigger>
@@ -218,7 +202,7 @@ const Header = () => {
             </DropdownMenu>
             
             {/* Wishlist */}
-            <Button variant="ghost" size="icon" className="rounded-full relative">
+            <Button variant="ghost" size="icon" className="rounded-full relative hover:bg-accent/50">
               <Heart size={20} />
               <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 0
@@ -228,7 +212,7 @@ const Header = () => {
             {/* Panier */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full relative">
+                <Button variant="ghost" size="icon" className="rounded-full relative hover:bg-accent/50">
                   <ShoppingCart size={20} />
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
                     0
@@ -260,7 +244,7 @@ const Header = () => {
 
       {/* Menu mobile */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b shadow-lg z-50">
+        <div className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-background border-b shadow-lg z-50 overflow-auto">
           <div className="container py-4 flex flex-col space-y-4">
             {/* Barre de recherche mobile */}
             <form onSubmit={handleSearch} className="w-full flex">
@@ -278,12 +262,25 @@ const Header = () => {
             
             {/* Menu navigation mobile */}
             <div className="border p-2 rounded-md">
-              <Button variant="ghost" className="w-full flex justify-between items-center">
-                <span className="flex items-center gap-2">
-                  <ChevronDown size={16} />
-                  <span>Catégories</span>
-                </span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="w-full flex justify-between items-center">
+                    <span className="flex items-center gap-2">
+                      <ChevronDown size={16} />
+                      <span>Catégories</span>
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                  {categories.map((category, index) => (
+                    <DropdownMenuItem key={index}>
+                      <a href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="w-full">
+                        {category.name}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             
             <a 
