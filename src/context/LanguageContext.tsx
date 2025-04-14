@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type LanguageType = 'en' | 'fr' | 'ar';
 
@@ -11,14 +11,23 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<LanguageType>('fr');
+  // Récupérer la langue sauvegardée dans localStorage ou utiliser 'fr' par défaut
+  const [language, setLanguage] = useState<LanguageType>(() => {
+    const savedLanguage = localStorage.getItem('preferred-language');
+    return (savedLanguage as LanguageType) || 'fr';
+  });
 
   const handleSetLanguage = (lang: LanguageType) => {
+    console.log(`Changing language to: ${lang}`);
     setLanguage(lang);
     document.documentElement.lang = lang;
-    // Ici, vous pourriez également sauvegarder la préférence de langue dans localStorage
     localStorage.setItem('preferred-language', lang);
   };
+
+  // Effet pour initialiser la langue du document au chargement
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, []);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage }}>

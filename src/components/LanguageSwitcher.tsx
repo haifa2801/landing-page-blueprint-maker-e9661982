@@ -21,6 +21,7 @@ const LanguageSwitcher = () => {
   ];
 
   const handleChangeLanguage = (lang: 'en' | 'fr' | 'ar') => {
+    console.log(`LanguageSwitcher: changing to ${lang}`);
     setLanguage(lang);
     setIsOpen(false);
   };
