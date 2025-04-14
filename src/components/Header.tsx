@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, Star, MessageCircle, Globe, Languages } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, Star, MessageCircle, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
@@ -33,11 +33,11 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
 } from "@/components/ui/menubar";
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState("FR");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -47,13 +47,6 @@ const Header = () => {
     e.preventDefault();
     console.log("Recherche pour:", searchQuery);
     // Logique de recherche à implémenter
-  };
-
-  const handleLanguageChange = (lang: string) => {
-    setCurrentLanguage(lang);
-    console.log("Langue changée pour:", lang);
-    // Ici vous pouvez implémenter la logique de changement de langue
-    // Par exemple avec i18n ou une autre bibliothèque de traduction
   };
 
   // Définition des catégories et sous-catégories
@@ -114,14 +107,6 @@ const Header = () => {
       name: "Biography & Memoir",
       icon: <Book className="h-5 w-5" />,
     },
-  ];
-
-  // Définition des langues disponibles
-  const languages = [
-    { code: "FR", label: "Français" },
-    { code: "EN", label: "English" },
-    { code: "ES", label: "Español" },
-    { code: "DE", label: "Deutsch" },
   ];
 
   return (
@@ -227,24 +212,7 @@ const Header = () => {
           {/* Icônes e-commerce */}
           <div className="flex items-center space-x-4 ml-4">
             {/* Sélecteur de langue */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full hover:bg-accent/50">
-                  <Globe size={20} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-36">
-                {languages.map((lang) => (
-                  <DropdownMenuItem 
-                    key={lang.code}
-                    className={`${currentLanguage === lang.code ? 'bg-accent text-accent-foreground' : ''}`}
-                    onClick={() => handleLanguageChange(lang.code)}
-                  >
-                    {lang.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <LanguageSwitcher />
             
             {/* Dropdown de l'utilisateur */}
             <DropdownMenu>
@@ -328,18 +296,8 @@ const Header = () => {
                 <Globe size={18} className="mr-2" />
                 <span>Langue</span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {languages.map((lang) => (
-                  <Button
-                    key={lang.code}
-                    variant={currentLanguage === lang.code ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleLanguageChange(lang.code)}
-                    className="w-full"
-                  >
-                    {lang.label}
-                  </Button>
-                ))}
+              <div className="flex justify-center">
+                <LanguageSwitcher />
               </div>
             </div>
             
