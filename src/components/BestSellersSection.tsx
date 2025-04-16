@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -115,22 +116,30 @@ const BestSellersSection: React.FC = () => {
           {bestSellers.map((book) => (
             <div key={book.id} className="flex flex-col md:flex-row md:items-center gap-6 p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
               <div className="w-full md:w-1/3 aspect-[2/3] overflow-hidden rounded-md">
-                <img 
-                  src={book.cover} 
-                  alt={book.title} 
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                />
+                <Link to={`/book/${book.id}`}>
+                  <img 
+                    src={book.cover} 
+                    alt={book.title} 
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </Link>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-2">{book.title}</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  <Link to={`/book/${book.id}`} className="hover:text-primary transition-colors">
+                    {book.title}
+                  </Link>
+                </h3>
                 <p className="text-gray-600 mb-2">{book.author}</p>
                 {renderRating(book.rating)}
                 <p className="text-sm font-medium text-green-600 mt-2">
                   {book.sales} {salesText[language]}
                 </p>
-                <Button className="mt-4 w-full" size="sm">
-                  {buttonText[language]}
-                </Button>
+                <Link to={`/book/${book.id}`}>
+                  <Button className="mt-4 w-full" size="sm">
+                    {buttonText[language]}
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}
