@@ -1,10 +1,9 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Star, BookOpen, Users, Calendar, ChevronLeft } from 'lucide-react';
+import { Star, BookOpen, Users, Calendar, ChevronLeft, Headphones, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -20,11 +19,15 @@ interface BookDetails {
   price: string;
   description: string;
   categories: string[];
+  hasAudioVersion: boolean;
+  audioSample?: string;
 }
 
 const BookDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { language } = useLanguage();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
   // Translations
   const translations = {
@@ -67,6 +70,31 @@ const BookDetail = () => {
       en: 'Categories',
       fr: 'Catégories',
       ar: 'فئات'
+    },
+    audioVersion: {
+      en: 'Audio Version',
+      fr: 'Version Audio',
+      ar: 'النسخة الصوتية'
+    },
+    audioAvailable: {
+      en: 'Audio version available',
+      fr: 'Version audio disponible',
+      ar: 'النسخة الصوتية متاحة'
+    },
+    audioUnavailable: {
+      en: 'Audio version not available',
+      fr: 'Version audio non disponible',
+      ar: 'النسخة الصوتية غير متاحة'
+    },
+    listenSample: {
+      en: 'Listen to sample',
+      fr: 'Écouter un extrait',
+      ar: 'استمع إلى العينة'
+    },
+    pause: {
+      en: 'Pause',
+      fr: 'Pause',
+      ar: 'توقف'
     }
   };
 
@@ -86,7 +114,9 @@ const BookDetail = () => {
       : language === 'fr'
       ? 'Les Fleurs du mal est un recueil de poèmes de Charles Baudelaire, englobant la quasi-totalité de sa production en vers, de 1840 jusqu\'à sa mort survenue fin août 1867. Ce recueil est l\'une des œuvres les plus importantes de la poésie moderne.'
       : 'زهور الشر هو ديوان شعر فرنسي من تأليف شارل بودلير. نُشر لأول مرة عام 1857، وكان له أهمية في الحركات الرمزية والحداثية. تتناول القصائد مواضيع تتعلق بالانحطاط والإيروتيكية.',
-    categories: ['Poetry', 'Classic', 'French Literature']
+    categories: ['Poetry', 'Classic', 'French Literature'],
+    hasAudioVersion: true,
+    audioSample: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Example audio URL
   };
 
   // Function to render stars based on rating
@@ -123,6 +153,37 @@ const BookDetail = () => {
     );
   };
 
+  // Handle audio playback
+  const toggleAudio = () => {
+    if (!audioElement && bookData.audioSample) {
+      const audio = new Audio(bookData.audioSample);
+      setAudioElement(audio);
+      audio.play();
+      setIsPlaying(true);
+      
+      audio.addEventListener('ended', () => {
+        setIsPlaying(false);
+      });
+    } else if (audioElement) {
+      if (isPlaying) {
+        audioElement.pause();
+      } else {
+        audioElement.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Cleanup audio on component unmount
+  React.useEffect(() => {
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.src = '';
+      }
+    };
+  }, [audioElement]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -136,13 +197,50 @@ const BookDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Book Cover */}
           <div className="col-span-1 mb-6">
-            <div className="aspect-[2/3] overflow-hidden rounded-lg shadow-lg">
+            <div className="aspect-[2/3] overflow-hidden rounded-lg shadow-lg mb-4">
               <img 
                 src={bookData.cover} 
                 alt={bookData.title} 
                 className="w-full h-full object-cover"
               />
             </div>
+            
+            {/* Audio Version Availability */}
+            <div className={`p-4 rounded-lg mb-4 flex items-center gap-3 ${bookData.hasAudioVersion ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'}`}>
+              {bookData.hasAudioVersion ? (
+                <Headphones className="shrink-0" />
+              ) : (
+                <VolumeX className="shrink-0" />
+              )}
+              <span className="font-medium">
+                {bookData.hasAudioVersion 
+                  ? translations.audioAvailable[language]
+                  : translations.audioUnavailable[language]
+                }
+              </span>
+            </div>
+            
+            {/* Audio Sample Player */}
+            {bookData.hasAudioVersion && (
+              <div className="mt-4">
+                <Button 
+                  onClick={toggleAudio}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <Headphones className="mr-2" size={18} />
+                  {isPlaying ? translations.pause[language] : translations.listenSample[language]}
+                </Button>
+                
+                {isPlaying && (
+                  <div className="mt-3 w-full">
+                    <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary w-1/3 animate-pulse-slow"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Book Details */}

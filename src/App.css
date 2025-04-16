@@ -54,6 +54,10 @@
   animation: pulse 4s ease-in-out infinite;
 }
 
+.animate-pulse-slow {
+  animation: pulse 2s ease-in-out infinite;
+}
+
 /* Transition styles */
 .transition-all {
   transition-property: all;
