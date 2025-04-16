@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { Link } from 'react-router-dom';
 import { 
   Carousel,
   CarouselContent,
@@ -119,29 +120,31 @@ const NewReleasesSection: React.FC = () => {
           <CarouselContent>
             {newReleases.map((book) => (
               <CarouselItem key={book.id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-lg">
-                  <div className="aspect-[2/3] overflow-hidden">
-                    <img 
-                      src={book.cover} 
-                      alt={book.title} 
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                  <CardHeader className="p-4">
-                    <CardTitle className="text-lg">{book.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                    <p className="text-sm text-gray-600">{book.author}</p>
-                    <div className="mt-2">
-                      {renderRating(book.rating)}
+                <Link to={`/book/${book.id}`} className="block h-full">
+                  <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-lg">
+                    <div className="aspect-[2/3] overflow-hidden">
+                      <img 
+                        src={book.cover} 
+                        alt={book.title} 
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
                     </div>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0">
-                    <Button size="sm" variant="outline" className="w-full">
-                      {buttonText[language]}
-                    </Button>
-                  </CardFooter>
-                </Card>
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-lg">{book.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <p className="text-sm text-gray-600">{book.author}</p>
+                      <div className="mt-2">
+                        {renderRating(book.rating)}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-0">
+                      <Button size="sm" variant="outline" className="w-full">
+                        {buttonText[language]}
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>
