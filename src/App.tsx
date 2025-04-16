@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import BookDetail from "./pages/BookDetail";
 import AuthorPage from "./pages/AuthorPage";
+import EbookCategories from "./pages/EbookCategories";
+import AudiobookCategories from "./pages/AudiobookCategories";
+import CategoryPage from "./pages/CategoryPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/book/:id" element={<BookDetail />} />
             <Route path="/author/:authorId" element={<AuthorPage />} />
+            <Route path="/categories/ebooks" element={<EbookCategories />} />
+            <Route path="/categories/audiobooks" element={<AudiobookCategories />} />
+            <Route path="/category/:type/:categoryName" element={<CategoryPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, Star, MessageCircle, Globe } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, ChevronDown, BookOpen, Mail, Book, Bookmark, Star, MessageCircle, Globe, Headphones } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { 
   DropdownMenu,
@@ -33,6 +34,7 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
 } from "@/components/ui/menubar";
+import { Link } from "react-router-dom";
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
@@ -50,7 +52,7 @@ const Header = () => {
   };
 
   // Définition des catégories et sous-catégories
-  const categories = [
+  const ebookCategories = [
     {
       name: 'Inspiration & Personal Growth',
       subcategories: ['Personal Development', 'Motivation & Inspiration']
@@ -84,6 +86,37 @@ const Header = () => {
       subcategories: []
     }
   ];
+  
+  const audiobookCategories = [
+    {
+      name: 'Bestselling Audiobooks',
+      subcategories: []
+    },
+    {
+      name: 'Self-Development',
+      subcategories: ['Mindfulness', 'Productivity']
+    },
+    {
+      name: 'Fiction & Literature',
+      subcategories: ['Novels', 'Short Stories', 'Poetry']
+    },
+    {
+      name: 'Business & Career',
+      subcategories: ['Leadership', 'Management']
+    },
+    {
+      name: 'Science & Technology',
+      subcategories: ['Popular Science', 'Technology']
+    },
+    {
+      name: 'Language Learning',
+      subcategories: []
+    },
+    {
+      name: 'Children & Young Adult',
+      subcategories: []
+    }
+  ];
 
   // Définition des sous-catégories populaires avec leurs icônes
   const popularSubcategories = [
@@ -112,9 +145,9 @@ const Header = () => {
   return (
     <header className="py-4 border-b sticky top-0 bg-background z-40">
       <div className="container flex items-center justify-between">
-        <a href="/" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <span className="text-xl font-bold text-primary">BOOKLY</span>
-        </a>
+        </Link>
 
         {/* Barre de recherche */}
         <div className="hidden md:flex mx-4 flex-1 max-w-md">
@@ -141,36 +174,18 @@ const Header = () => {
                 Catégories <ChevronDown className="h-4 w-4 ml-1" />
               </MenubarTrigger>
               <MenubarContent className="bg-background min-w-[220px]">
-                {categories.map((category, index) => (
-                  category.subcategories.length > 0 ? (
-                    <MenubarSub key={index}>
-                      <MenubarSubTrigger className="cursor-pointer">
-                        {category.name}
-                      </MenubarSubTrigger>
-                      <MenubarSubContent className="bg-background min-w-[220px]">
-                        {category.subcategories.map((subcat, subIndex) => (
-                          <MenubarItem key={subIndex}>
-                            <a 
-                              href={`/category/${subcat.toLowerCase().replace(/\s+/g, '-')}`}
-                              className="w-full block"
-                            >
-                              {subcat}
-                            </a>
-                          </MenubarItem>
-                        ))}
-                      </MenubarSubContent>
-                    </MenubarSub>
-                  ) : (
-                    <MenubarItem key={index}>
-                      <a 
-                        href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="w-full block"
-                      >
-                        {category.name}
-                      </a>
-                    </MenubarItem>
-                  )
-                ))}
+                <MenubarItem>
+                  <Link to="/categories/ebooks" className="w-full flex items-center">
+                    <Book size={16} className="mr-2" />
+                    <span>Ebooks</span>
+                  </Link>
+                </MenubarItem>
+                <MenubarItem>
+                  <Link to="/categories/audiobooks" className="w-full flex items-center">
+                    <Headphones size={16} className="mr-2" />
+                    <span>Audio Books</span>
+                  </Link>
+                </MenubarItem>
               </MenubarContent>
             </MenubarMenu>
             
@@ -303,37 +318,41 @@ const Header = () => {
             
             {/* Menu navigation mobile */}
             <div className="space-y-4">
-              {categories.map((category, index) => (
-                <div key={index} className="border rounded-md">
-                  <Button 
-                    variant="ghost" 
-                    className="w-full flex justify-between items-center text-left font-normal"
-                    onClick={() => {
-                      const elem = document.getElementById(`mobile-category-${index}`);
-                      if (elem) {
-                        elem.classList.toggle('hidden');
-                      }
-                    }}
+              {/* Option Catégories */}
+              <div className="border rounded-md">
+                <Button 
+                  variant="ghost" 
+                  className="w-full flex justify-between items-center text-left font-normal"
+                  onClick={() => {
+                    const elem = document.getElementById('mobile-categories');
+                    if (elem) {
+                      elem.classList.toggle('hidden');
+                    }
+                  }}
+                >
+                  <span>Catégories</span>
+                  <ChevronDown size={16} />
+                </Button>
+                
+                <div id="mobile-categories" className="hidden px-4 py-2 space-y-2">
+                  <Link 
+                    to="/categories/ebooks" 
+                    className="flex items-center py-2 text-sm hover:text-primary transition-colors"
+                    onClick={toggleMenu}
                   >
-                    <span>{category.name}</span>
-                    <ChevronDown size={16} />
-                  </Button>
-                  
-                  {category.subcategories.length > 0 && (
-                    <div id={`mobile-category-${index}`} className="hidden px-4 py-2 space-y-2">
-                      {category.subcategories.map((subcat, subIndex) => (
-                        <a 
-                          key={subIndex} 
-                          href={`/category/${subcat.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="block py-1 text-sm hover:text-primary transition-colors"
-                        >
-                          {subcat}
-                        </a>
-                      ))}
-                    </div>
-                  )}
+                    <Book size={16} className="mr-2" />
+                    <span>Ebooks</span>
+                  </Link>
+                  <Link 
+                    to="/categories/audiobooks" 
+                    className="flex items-center py-2 text-sm hover:text-primary transition-colors"
+                    onClick={toggleMenu}
+                  >
+                    <Headphones size={16} className="mr-2" />
+                    <span>Audio Books</span>
+                  </Link>
                 </div>
-              ))}
+              </div>
               
               <a 
                 href="#apropos" 
