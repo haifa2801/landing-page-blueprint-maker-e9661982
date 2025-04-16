@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Star, BookOpen, Users, Calendar, ChevronLeft, Headphones, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface BookDetails {
   id: string;
@@ -29,7 +28,6 @@ const BookDetail = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
-  // Translations
   const translations = {
     backToHome: {
       en: 'Back to home',
@@ -98,7 +96,6 @@ const BookDetail = () => {
     }
   };
 
-  // Mocked data for a book (in a real app, you would fetch this data from an API)
   const bookData: BookDetails = {
     id: id || '1',
     title: 'Les Fleurs du Mal',
@@ -116,10 +113,9 @@ const BookDetail = () => {
       : 'زهور الشر هو ديوان شعر فرنسي من تأليف شارل بودلير. نُشر لأول مرة عام 1857، وكان له أهمية في الحركات الرمزية والحداثية. تتناول القصائد مواضيع تتعلق بالانحطاط والإيروتيكية.',
     categories: ['Poetry', 'Classic', 'French Literature'],
     hasAudioVersion: true,
-    audioSample: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Example audio URL
+    audioSample: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
   };
 
-  // Function to render stars based on rating
   const renderRating = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -153,7 +149,6 @@ const BookDetail = () => {
     );
   };
 
-  // Handle audio playback
   const toggleAudio = () => {
     if (!audioElement && bookData.audioSample) {
       const audio = new Audio(bookData.audioSample);
@@ -174,7 +169,6 @@ const BookDetail = () => {
     }
   };
 
-  // Cleanup audio on component unmount
   React.useEffect(() => {
     return () => {
       if (audioElement) {
@@ -195,7 +189,6 @@ const BookDetail = () => {
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Book Cover */}
           <div className="col-span-1 mb-6">
             <div className="aspect-[2/3] overflow-hidden rounded-lg shadow-lg mb-4">
               <img 
@@ -205,7 +198,6 @@ const BookDetail = () => {
               />
             </div>
             
-            {/* Audio Version Availability */}
             <div className={`p-4 rounded-lg mb-4 flex items-center gap-3 ${bookData.hasAudioVersion ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'}`}>
               {bookData.hasAudioVersion ? (
                 <Headphones className="shrink-0" />
@@ -220,7 +212,6 @@ const BookDetail = () => {
               </span>
             </div>
             
-            {/* Audio Sample Player */}
             {bookData.hasAudioVersion && (
               <div className="mt-4">
                 <Button 
@@ -243,17 +234,17 @@ const BookDetail = () => {
             )}
           </div>
 
-          {/* Book Details */}
           <div className="col-span-1 lg:col-span-2">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">{bookData.title}</h1>
-            <p className="text-lg text-gray-600 mb-4">{bookData.author}</p>
+            <Link to="/author/1" className="text-lg text-primary hover:underline mb-4 block">
+              {bookData.author}
+            </Link>
             
             <div className="flex items-center gap-2 mb-6">
               {renderRating(bookData.rating)}
               <span className="text-sm text-gray-500">({bookData.rating})</span>
             </div>
             
-            {/* Book Metadata */}
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="flex flex-col items-center p-4 border rounded-lg">
                 <BookOpen className="text-primary mb-2" size={20} />
@@ -272,7 +263,6 @@ const BookDetail = () => {
               </div>
             </div>
             
-            {/* Price and Actions */}
             <div className="flex items-center justify-between mb-8">
               <p className="text-2xl font-bold">{bookData.price}</p>
               <div className="flex gap-4">
@@ -281,13 +271,11 @@ const BookDetail = () => {
               </div>
             </div>
             
-            {/* Description */}
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">{translations.description[language]}</h2>
               <p className="text-gray-700 leading-relaxed">{bookData.description}</p>
             </div>
             
-            {/* Categories */}
             <div>
               <h2 className="text-xl font-bold mb-4">{translations.categories[language]}</h2>
               <div className="flex flex-wrap gap-2">

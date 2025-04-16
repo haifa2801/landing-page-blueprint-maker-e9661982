@@ -16,6 +16,7 @@ interface Book {
   id: number;
   title: string;
   author: string;
+  authorId: number;
   cover: string;
   rating: number;
   sales: string;
@@ -50,6 +51,7 @@ const BestSellersSection: React.FC = () => {
       id: 1,
       title: 'Les Fleurs du Mal',
       author: 'Charles Baudelaire',
+      authorId: 1,
       cover: '/lovable-uploads/6ca72849-5774-4154-9d7c-f22991fb1fcb.png',
       rating: 4.8,
       sales: '500K+'
@@ -58,6 +60,7 @@ const BestSellersSection: React.FC = () => {
       id: 2,
       title: 'Notre-Dame de Paris',
       author: 'Victor Hugo',
+      authorId: 2,
       cover: '/lovable-uploads/6ca72849-5774-4154-9d7c-f22991fb1fcb.png',
       rating: 4.9,
       sales: '1M+'
@@ -66,6 +69,7 @@ const BestSellersSection: React.FC = () => {
       id: 3,
       title: 'Le Petit Prince',
       author: 'Antoine de Saint-Exupéry',
+      authorId: 3,
       cover: '/lovable-uploads/6ca72849-5774-4154-9d7c-f22991fb1fcb.png',
       rating: 5.0,
       sales: '2M+'
@@ -113,30 +117,38 @@ const BestSellersSection: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {bestSellers.map((book) => (
-            <Link key={book.id} to={`/book/${book.id}`} className="block">
+            <div key={book.id} className="block">
               <div className="flex flex-col md:flex-row md:items-center gap-6 p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="w-full md:w-1/3 aspect-[2/3] overflow-hidden rounded-md">
-                  <img 
-                    src={book.cover} 
-                    alt={book.title} 
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
+                  <Link to={`/book/${book.id}`}>
+                    <img 
+                      src={book.cover} 
+                      alt={book.title} 
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </Link>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold mb-2 hover:text-primary transition-colors">
-                    {book.title}
-                  </h3>
-                  <p className="text-gray-600 mb-2">{book.author}</p>
+                  <Link to={`/book/${book.id}`} className="block">
+                    <h3 className="text-xl font-bold mb-2 hover:text-primary transition-colors">
+                      {book.title}
+                    </h3>
+                  </Link>
+                  <Link to={`/author/${book.authorId}`} className="text-gray-600 mb-2 hover:text-primary hover:underline">
+                    {book.author}
+                  </Link>
                   {renderRating(book.rating)}
                   <p className="text-sm font-medium text-green-600 mt-2">
                     {book.sales} {salesText[language]}
                   </p>
-                  <Button className="mt-4 w-full" size="sm">
-                    {buttonText[language]}
-                  </Button>
+                  <Link to={`/book/${book.id}`}>
+                    <Button className="mt-4 w-full" size="sm">
+                      {buttonText[language]}
+                    </Button>
+                  </Link>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
