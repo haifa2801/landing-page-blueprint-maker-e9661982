@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,7 @@ export default function ReportsManagement() {
       
       toast({
         title: "Livre masqué",
-        description: `"${selectedReport.bookTitle}" a été masqué et le signalement a été résolu",
+        description: `"${selectedReport.bookTitle}" a été masqué et le signalement a été résolu`,
       });
     } else if (actionType === "dismiss") {
       setReports(reports.map(r => 
