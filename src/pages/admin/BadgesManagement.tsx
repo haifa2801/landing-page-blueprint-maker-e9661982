@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -6,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Award, PlusCircle, CheckCircle2, XCircle, Pencil, Trash2, Search, Users, BookText } from "lucide-react";
+import { Award, PlusCircle, CheckCircle2, XCircle, Pencil, Trash2, Search, Users, BookText, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Données fictives pour la démonstration
 const MOCK_BADGES = [
   { id: 1, name: "Top Writer", description: "Écrivains avec une note moyenne supérieure à 4.5", icon: "star", color: "gold", type: "writer" },
   { id: 2, name: "Verified", description: "Écrivain vérifié par la plateforme", icon: "check-circle", color: "blue", type: "writer" },
@@ -54,22 +52,18 @@ export default function BadgesManagement() {
   const [businessRequests, setBusinessRequests] = useState(MOCK_BUSINESS_REQUESTS);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Filtres et pagination pour les badges
   const [badgesPage, setBadgesPage] = useState(1);
   const [badgeSearch, setBadgeSearch] = useState("");
   const [filteredBadges, setFilteredBadges] = useState(badges);
   
-  // Filtres et pagination pour les assignments
   const [assignmentsPage, setAssignmentsPage] = useState(1);
   const [assignmentSearch, setAssignmentSearch] = useState("");
   const [filteredAssignments, setFilteredAssignments] = useState(badgeAssignments);
   
-  // Filtres et pagination pour les demandes business
   const [businessPage, setBusinessPage] = useState(1);
   const [businessStatusFilter, setBusinessStatusFilter] = useState("all");
   const [filteredBusinessRequests, setFilteredBusinessRequests] = useState(businessRequests);
   
-  // Dialog states
   const [selectedBadge, setSelectedBadge] = useState(null);
   const [isBadgeDialogOpen, setIsBadgeDialogOpen] = useState(false);
   const [badgeFormMode, setBadgeFormMode] = useState("add");
@@ -82,7 +76,6 @@ export default function BadgesManagement() {
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState("");
   
-  // Formulaire badge
   const [badgeForm, setBadgeForm] = useState({
     name: "",
     description: "",
@@ -91,12 +84,10 @@ export default function BadgesManagement() {
     type: "writer"
   });
   
-  // Nombre d'éléments par page
   const itemsPerPage = 10;
   
   const { toast } = useToast();
 
-  // Simulation du chargement des données
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -105,7 +96,6 @@ export default function BadgesManagement() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filtrage des badges
   useEffect(() => {
     let results = badges;
     
@@ -119,7 +109,6 @@ export default function BadgesManagement() {
     setFilteredBadges(results);
   }, [badgeSearch, badges]);
 
-  // Filtrage des assignments
   useEffect(() => {
     let results = badgeAssignments;
     
@@ -133,7 +122,6 @@ export default function BadgesManagement() {
     setFilteredAssignments(results);
   }, [assignmentSearch, badgeAssignments]);
 
-  // Filtrage des demandes business
   useEffect(() => {
     let results = businessRequests;
     
@@ -144,7 +132,6 @@ export default function BadgesManagement() {
     setFilteredBusinessRequests(results);
   }, [businessStatusFilter, businessRequests]);
 
-  // Pagination
   const badgeItems = filteredBadges.slice((badgesPage - 1) * itemsPerPage, badgesPage * itemsPerPage);
   const badgesTotalPages = Math.ceil(filteredBadges.length / itemsPerPage);
 
@@ -154,7 +141,6 @@ export default function BadgesManagement() {
   const businessItems = filteredBusinessRequests.slice((businessPage - 1) * itemsPerPage, businessPage * itemsPerPage);
   const businessTotalPages = Math.ceil(filteredBusinessRequests.length / itemsPerPage);
 
-  // Handlers pour les badges
   const handleAddBadge = () => {
     setBadgeForm({
       name: "",
@@ -213,7 +199,6 @@ export default function BadgesManagement() {
     }
   };
 
-  // Handlers pour les assignments
   const handleViewAssignment = (assignment) => {
     setSelectedAssignment(assignment);
     setIsAssignmentDialogOpen(true);
@@ -225,7 +210,6 @@ export default function BadgesManagement() {
     setIsActionDialogOpen(true);
   };
 
-  // Handlers pour les demandes business
   const handleViewBusinessRequest = (request) => {
     setSelectedBusinessRequest(request);
     setIsBusinessDialogOpen(true);
@@ -237,14 +221,11 @@ export default function BadgesManagement() {
     setIsActionDialogOpen(true);
   };
 
-  // Effectuer une action
   const performAction = () => {
     setIsActionDialogOpen(false);
     
     if (actionType === "deleteBadge") {
-      // Supprimer le badge
       setBadges(badges.filter(b => b.id !== selectedBadge.id));
-      // Supprimer également les assignments liés
       setBadgeAssignments(badgeAssignments.filter(a => a.badgeId !== selectedBadge.id));
       
       toast({
@@ -293,7 +274,6 @@ export default function BadgesManagement() {
           </TabsTrigger>
         </TabsList>
         
-        {/* Onglet Badges */}
         <TabsContent value="badges" className="space-y-6 pt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -384,7 +364,6 @@ export default function BadgesManagement() {
                 </TableBody>
               </Table>
               
-              {/* Pagination */}
               {badgesTotalPages > 1 && (
                 <div className="mt-4">
                   <Pagination>
@@ -392,7 +371,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationPrevious 
                           onClick={() => setBadgesPage(prev => Math.max(prev - 1, 1))}
-                          disabled={badgesPage === 1}
+                          aria-disabled={badgesPage === 1}
+                          className={badgesPage === 1 ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                       
@@ -410,7 +390,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationNext 
                           onClick={() => setBadgesPage(prev => Math.min(prev + 1, badgesTotalPages))}
-                          disabled={badgesPage === badgesTotalPages}
+                          aria-disabled={badgesPage === badgesTotalPages}
+                          className={badgesPage === badgesTotalPages ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                     </PaginationContent>
@@ -421,7 +402,6 @@ export default function BadgesManagement() {
           </Card>
         </TabsContent>
         
-        {/* Onglet Attributions */}
         <TabsContent value="assignments" className="space-y-6 pt-4">
           <Card>
             <CardHeader>
@@ -501,7 +481,6 @@ export default function BadgesManagement() {
                 </TableBody>
               </Table>
               
-              {/* Pagination */}
               {assignmentsTotalPages > 1 && (
                 <div className="mt-4">
                   <Pagination>
@@ -509,7 +488,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationPrevious 
                           onClick={() => setAssignmentsPage(prev => Math.max(prev - 1, 1))}
-                          disabled={assignmentsPage === 1}
+                          aria-disabled={assignmentsPage === 1}
+                          className={assignmentsPage === 1 ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                       
@@ -527,7 +507,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationNext 
                           onClick={() => setAssignmentsPage(prev => Math.min(prev + 1, assignmentsTotalPages))}
-                          disabled={assignmentsPage === assignmentsTotalPages}
+                          aria-disabled={assignmentsPage === assignmentsTotalPages}
+                          className={assignmentsPage === assignmentsTotalPages ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                     </PaginationContent>
@@ -538,7 +519,6 @@ export default function BadgesManagement() {
           </Card>
         </TabsContent>
         
-        {/* Onglet Business */}
         <TabsContent value="business" className="space-y-6 pt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -648,7 +628,6 @@ export default function BadgesManagement() {
                 </TableBody>
               </Table>
               
-              {/* Pagination */}
               {businessTotalPages > 1 && (
                 <div className="mt-4">
                   <Pagination>
@@ -656,7 +635,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationPrevious 
                           onClick={() => setBusinessPage(prev => Math.max(prev - 1, 1))}
-                          disabled={businessPage === 1}
+                          aria-disabled={businessPage === 1}
+                          className={businessPage === 1 ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                       
@@ -674,7 +654,8 @@ export default function BadgesManagement() {
                       <PaginationItem>
                         <PaginationNext 
                           onClick={() => setBusinessPage(prev => Math.min(prev + 1, businessTotalPages))}
-                          disabled={businessPage === businessTotalPages}
+                          aria-disabled={businessPage === businessTotalPages}
+                          className={businessPage === businessTotalPages ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
                     </PaginationContent>
@@ -686,7 +667,6 @@ export default function BadgesManagement() {
         </TabsContent>
       </Tabs>
       
-      {/* Dialog pour ajouter/modifier un badge */}
       <Dialog open={isBadgeDialogOpen} onOpenChange={setIsBadgeDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -758,7 +738,6 @@ export default function BadgesManagement() {
         </DialogContent>
       </Dialog>
       
-      {/* Dialog pour voir les détails d'une attribution */}
       {selectedAssignment && (
         <Dialog open={isAssignmentDialogOpen} onOpenChange={setIsAssignmentDialogOpen}>
           <DialogContent className="sm:max-w-md">
@@ -801,7 +780,6 @@ export default function BadgesManagement() {
         </Dialog>
       )}
       
-      {/* Dialog pour voir les détails d'une demande business */}
       {selectedBusinessRequest && (
         <Dialog open={isBusinessDialogOpen} onOpenChange={setIsBusinessDialogOpen}>
           <DialogContent className="sm:max-w-md">
@@ -852,7 +830,6 @@ export default function BadgesManagement() {
         </Dialog>
       )}
       
-      {/* Dialog de confirmation d'action */}
       <Dialog open={isActionDialogOpen} onOpenChange={setIsActionDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -878,7 +855,6 @@ export default function BadgesManagement() {
   );
 }
 
-// Composant pour afficher le statut des demandes business avec un badge
 function BusinessStatusBadge({ status }) {
   switch (status) {
     case "pending":
@@ -904,8 +880,7 @@ function BusinessStatusBadge({ status }) {
   }
 }
 
-// Fonction pour formater les dates
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

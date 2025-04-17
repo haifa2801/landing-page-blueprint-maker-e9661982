@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -10,7 +9,6 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Eye, Ban, UserCheck, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Données fictives pour la démonstration
 const MOCK_USERS = Array(50).fill(0).map((_, i) => ({
   id: i + 1,
   name: `Utilisateur ${i + 1}`,
@@ -30,15 +28,8 @@ export default function UsersManagement() {
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Dialog states
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState("");
-
   const { toast } = useToast();
 
-  // Simulation du chargement des données
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -47,7 +38,6 @@ export default function UsersManagement() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filtrage des utilisateurs
   useEffect(() => {
     let results = users;
     
@@ -69,13 +59,11 @@ export default function UsersManagement() {
     setFilteredUsers(results);
   }, [searchTerm, roleFilter, statusFilter, users]);
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
-  // Actions handlers
   const handleViewUser = (user) => {
     setSelectedUser(user);
     setIsDetailsOpen(true);
@@ -90,7 +78,6 @@ export default function UsersManagement() {
   const performAction = () => {
     setIsActionDialogOpen(false);
     
-    // Dans une application réelle, ceci appellerait une API
     if (actionType === "ban") {
       setUsers(users.map(user => 
         user.id === selectedUser.id ? { ...user, status: "banned" } : user
@@ -267,13 +254,13 @@ export default function UsersManagement() {
         </CardContent>
       </Card>
       
-      {/* Pagination */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
+              aria-disabled={currentPage === 1}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
           
@@ -297,13 +284,13 @@ export default function UsersManagement() {
           <PaginationItem>
             <PaginationNext 
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
+              aria-disabled={currentPage === totalPages}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
       
-      {/* Détails de l'utilisateur */}
       {selectedUser && (
         <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
           <DialogContent className="sm:max-w-md">
@@ -342,7 +329,6 @@ export default function UsersManagement() {
         </Dialog>
       )}
       
-      {/* Dialogue de confirmation d'action */}
       {selectedUser && (
         <Dialog open={isActionDialogOpen} onOpenChange={setIsActionDialogOpen}>
           <DialogContent>
@@ -369,8 +355,7 @@ export default function UsersManagement() {
   );
 }
 
-// Fonction pour formater les dates
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

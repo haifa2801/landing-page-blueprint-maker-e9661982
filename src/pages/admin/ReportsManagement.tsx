@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,6 @@ import { Eye, AlertTriangle, CheckCircle2, XCircle, SendHorizontal } from "lucid
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/input";
 
-// Données fictives pour la démonstration
 const REPORT_REASONS = [
   "Contenu inapproprié",
   "Violation des droits d'auteur",
@@ -37,16 +35,8 @@ export default function ReportsManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [statusFilter, setStatusFilter] = useState("pending");
 
-  // Dialog states
-  const [selectedReport, setSelectedReport] = useState(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState("");
-  const [messageToAuthor, setMessageToAuthor] = useState("");
-
   const { toast } = useToast();
 
-  // Simulation du chargement des données
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -55,7 +45,6 @@ export default function ReportsManagement() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Filtrage des signalements
   useEffect(() => {
     let results = reports;
     
@@ -66,13 +55,11 @@ export default function ReportsManagement() {
     setFilteredReports(results);
   }, [statusFilter, reports]);
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredReports.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
 
-  // Actions handlers
   const handleViewReport = (report) => {
     setSelectedReport(report);
     setIsDetailsOpen(true);
@@ -88,7 +75,6 @@ export default function ReportsManagement() {
   const performAction = () => {
     setIsActionDialogOpen(false);
     
-    // Dans une application réelle, ceci appellerait une API
     if (actionType === "hideBook") {
       setReports(reports.map(r => 
         r.id === selectedReport.id ? { ...r, status: "resolved" } : r
@@ -231,13 +217,13 @@ export default function ReportsManagement() {
         </CardContent>
       </Card>
       
-      {/* Pagination */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
+              aria-disabled={currentPage === 1}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
           
@@ -261,13 +247,13 @@ export default function ReportsManagement() {
           <PaginationItem>
             <PaginationNext 
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
+              aria-disabled={currentPage === totalPages}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
       
-      {/* Détails du signalement */}
       {selectedReport && (
         <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
           <DialogContent className="sm:max-w-md">
@@ -314,7 +300,6 @@ export default function ReportsManagement() {
         </Dialog>
       )}
       
-      {/* Dialogue d'action */}
       {selectedReport && (
         <Dialog open={isActionDialogOpen} onOpenChange={setIsActionDialogOpen}>
           <DialogContent>
@@ -361,7 +346,6 @@ export default function ReportsManagement() {
   );
 }
 
-// Composant pour afficher le statut avec un badge
 function StatusBadge({ status }) {
   switch (status) {
     case "pending":
@@ -383,8 +367,7 @@ function StatusBadge({ status }) {
   }
 }
 
-// Fonction pour formater les dates
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }
