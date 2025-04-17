@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -5,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Award, PlusCircle, CheckCircle2, XCircle, Pencil, Trash2, Search, Users, BookText, Eye } from "lucide-react";
+import { Award, PlusCircle, Pencil, Trash2, Search, Users, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -34,22 +35,9 @@ const MOCK_BADGE_ASSIGNMENTS = Array(25).fill(0).map((_, i) => {
   };
 });
 
-const MOCK_BUSINESS_REQUESTS = Array(10).fill(0).map((_, i) => ({
-  id: i + 1,
-  companyName: `Entreprise ${i + 1}`,
-  contactName: `Contact ${i + 1}`,
-  email: `business${i + 1}@example.com`,
-  phone: `0123456${i.toString().padStart(3, '0')}`,
-  requestDate: new Date(2025, 3, 15 - i % 30).toISOString(),
-  status: i % 3 === 0 ? "approved" : i % 3 === 1 ? "rejected" : "pending",
-  booksQuantity: Math.floor(Math.random() * 990) + 10,
-  notes: `Demande d'achat en gros pour une bibliothèque d'entreprise. Intéressé par ${i % 2 === 0 ? "les ebooks" : "les livres audio"}.`
-}));
-
 export default function BadgesManagement() {
   const [badges, setBadges] = useState(MOCK_BADGES);
   const [badgeAssignments, setBadgeAssignments] = useState(MOCK_BADGE_ASSIGNMENTS);
-  const [businessRequests, setBusinessRequests] = useState(MOCK_BUSINESS_REQUESTS);
   const [isLoading, setIsLoading] = useState(true);
   
   const [badgesPage, setBadgesPage] = useState(1);
@@ -60,10 +48,6 @@ export default function BadgesManagement() {
   const [assignmentSearch, setAssignmentSearch] = useState("");
   const [filteredAssignments, setFilteredAssignments] = useState(badgeAssignments);
   
-  const [businessPage, setBusinessPage] = useState(1);
-  const [businessStatusFilter, setBusinessStatusFilter] = useState("all");
-  const [filteredBusinessRequests, setFilteredBusinessRequests] = useState(businessRequests);
-  
   const [selectedBadge, setSelectedBadge] = useState(null);
   const [isBadgeDialogOpen, setIsBadgeDialogOpen] = useState(false);
   const [badgeFormMode, setBadgeFormMode] = useState("add");
@@ -71,8 +55,6 @@ export default function BadgesManagement() {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [isAssignmentDialogOpen, setIsAssignmentDialogOpen] = useState(false);
   
-  const [selectedBusinessRequest, setSelectedBusinessRequest] = useState(null);
-  const [isBusinessDialogOpen, setIsBusinessDialogOpen] = useState(false);
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState("");
   
@@ -122,24 +104,11 @@ export default function BadgesManagement() {
     setFilteredAssignments(results);
   }, [assignmentSearch, badgeAssignments]);
 
-  useEffect(() => {
-    let results = businessRequests;
-    
-    if (businessStatusFilter !== "all") {
-      results = results.filter(request => request.status === businessStatusFilter);
-    }
-    
-    setFilteredBusinessRequests(results);
-  }, [businessStatusFilter, businessRequests]);
-
   const badgeItems = filteredBadges.slice((badgesPage - 1) * itemsPerPage, badgesPage * itemsPerPage);
   const badgesTotalPages = Math.ceil(filteredBadges.length / itemsPerPage);
 
   const assignmentItems = filteredAssignments.slice((assignmentsPage - 1) * itemsPerPage, assignmentsPage * itemsPerPage);
   const assignmentsTotalPages = Math.ceil(filteredAssignments.length / itemsPerPage);
-
-  const businessItems = filteredBusinessRequests.slice((businessPage - 1) * itemsPerPage, businessPage * itemsPerPage);
-  const businessTotalPages = Math.ceil(filteredBusinessRequests.length / itemsPerPage);
 
   const handleAddBadge = () => {
     setBadgeForm({
@@ -210,17 +179,6 @@ export default function BadgesManagement() {
     setIsActionDialogOpen(true);
   };
 
-  const handleViewBusinessRequest = (request) => {
-    setSelectedBusinessRequest(request);
-    setIsBusinessDialogOpen(true);
-  };
-  
-  const handleBusinessAction = (request, action) => {
-    setSelectedBusinessRequest(request);
-    setActionType(action);
-    setIsActionDialogOpen(true);
-  };
-
   const performAction = () => {
     setIsActionDialogOpen(false);
     
@@ -239,27 +197,15 @@ export default function BadgesManagement() {
         title: "Attribution supprimée",
         description: `L'attribution du badge "${selectedAssignment.badgeName}" à "${selectedAssignment.userName}" a été supprimée`,
       });
-    } else if (actionType === "approveRequest" || actionType === "rejectRequest") {
-      const newStatus = actionType === "approveRequest" ? "approved" : "rejected";
-      
-      setBusinessRequests(businessRequests.map(r => 
-        r.id === selectedBusinessRequest.id ? { ...r, status: newStatus } : r
-      ));
-      
-      const actionText = newStatus === "approved" ? "approuvée" : "rejetée";
-      toast({
-        title: `Demande ${actionText}`,
-        description: `La demande de "${selectedBusinessRequest.companyName}" a été ${actionText} avec succès`,
-      });
     }
   };
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Gestion des badges et demandes business</h1>
+      <h1 className="text-3xl font-bold">Gestion des badges</h1>
       
       <Tabs defaultValue="badges">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="badges">
             <Award className="h-4 w-4 mr-2" />
             Badges
@@ -267,10 +213,6 @@ export default function BadgesManagement() {
           <TabsTrigger value="assignments">
             <Users className="h-4 w-4 mr-2" />
             Attributions
-          </TabsTrigger>
-          <TabsTrigger value="business">
-            <BookText className="h-4 w-4 mr-2" />
-            Demandes Business
           </TabsTrigger>
         </TabsList>
         
@@ -518,153 +460,6 @@ export default function BadgesManagement() {
             </CardContent>
           </Card>
         </TabsContent>
-        
-        <TabsContent value="business" className="space-y-6 pt-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Demandes d'achat en gros</CardTitle>
-              <div className="flex gap-2">
-                <Button 
-                  variant={businessStatusFilter === "all" ? "default" : "outline"} 
-                  onClick={() => setBusinessStatusFilter("all")}
-                >
-                  Toutes
-                </Button>
-                <Button 
-                  variant={businessStatusFilter === "pending" ? "default" : "outline"} 
-                  onClick={() => setBusinessStatusFilter("pending")}
-                >
-                  En attente
-                </Button>
-                <Button 
-                  variant={businessStatusFilter === "approved" ? "default" : "outline"} 
-                  onClick={() => setBusinessStatusFilter("approved")}
-                >
-                  Approuvées
-                </Button>
-                <Button 
-                  variant={businessStatusFilter === "rejected" ? "default" : "outline"} 
-                  onClick={() => setBusinessStatusFilter("rejected")}
-                >
-                  Rejetées
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Entreprise</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Quantité</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {isLoading ? (
-                    Array(5).fill(0).map((_, i) => (
-                      <TableRow key={i}>
-                        {Array(7).fill(0).map((_, j) => (
-                          <TableCell key={j}>
-                            <div className="h-5 bg-gray-200 rounded animate-pulse"></div>
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : businessItems.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center py-10">
-                        Aucune demande trouvée
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    businessItems.map((request) => (
-                      <TableRow key={request.id}>
-                        <TableCell>{request.id}</TableCell>
-                        <TableCell>{request.companyName}</TableCell>
-                        <TableCell>{request.contactName}</TableCell>
-                        <TableCell>{formatDate(request.requestDate)}</TableCell>
-                        <TableCell>{request.booksQuantity} livres</TableCell>
-                        <TableCell>
-                          <BusinessStatusBadge status={request.status} />
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="icon"
-                              onClick={() => handleViewBusinessRequest(request)}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            
-                            {request.status === "pending" && (
-                              <>
-                                <Button 
-                                  variant="outline" 
-                                  size="icon"
-                                  onClick={() => handleBusinessAction(request, "approveRequest")}
-                                >
-                                  <CheckCircle2 className="h-4 w-4 text-green-500" />
-                                </Button>
-                                
-                                <Button 
-                                  variant="outline" 
-                                  size="icon"
-                                  onClick={() => handleBusinessAction(request, "rejectRequest")}
-                                >
-                                  <XCircle className="h-4 w-4 text-red-500" />
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-              
-              {businessTotalPages > 1 && (
-                <div className="mt-4">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious 
-                          onClick={() => setBusinessPage(prev => Math.max(prev - 1, 1))}
-                          aria-disabled={businessPage === 1}
-                          className={businessPage === 1 ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-                      
-                      {Array.from({ length: Math.min(5, businessTotalPages) }).map((_, i) => (
-                        <PaginationItem key={i}>
-                          <PaginationLink 
-                            isActive={businessPage === i + 1}
-                            onClick={() => setBusinessPage(i + 1)}
-                          >
-                            {i + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      
-                      <PaginationItem>
-                        <PaginationNext 
-                          onClick={() => setBusinessPage(prev => Math.min(prev + 1, businessTotalPages))}
-                          aria-disabled={businessPage === businessTotalPages}
-                          className={businessPage === businessTotalPages ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
       
       <Dialog open={isBadgeDialogOpen} onOpenChange={setIsBadgeDialogOpen}>
@@ -780,56 +575,6 @@ export default function BadgesManagement() {
         </Dialog>
       )}
       
-      {selectedBusinessRequest && (
-        <Dialog open={isBusinessDialogOpen} onOpenChange={setIsBusinessDialogOpen}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Détails de la demande</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">ID</p>
-                  <p>{selectedBusinessRequest.id}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Date</p>
-                  <p>{formatDate(selectedBusinessRequest.requestDate)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Entreprise</p>
-                  <p>{selectedBusinessRequest.companyName}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Contact</p>
-                  <p>{selectedBusinessRequest.contactName}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Email</p>
-                  <p>{selectedBusinessRequest.email}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Téléphone</p>
-                  <p>{selectedBusinessRequest.phone}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Quantité</p>
-                  <p>{selectedBusinessRequest.booksQuantity} livres</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Statut</p>
-                  <BusinessStatusBadge status={selectedBusinessRequest.status} />
-                </div>
-                <div className="col-span-2">
-                  <p className="text-sm font-medium text-muted-foreground">Notes</p>
-                  <p className="text-sm mt-1">{selectedBusinessRequest.notes}</p>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-      
       <Dialog open={isActionDialogOpen} onOpenChange={setIsActionDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -837,8 +582,6 @@ export default function BadgesManagement() {
             <DialogDescription>
               {actionType === "deleteBadge" && `Êtes-vous sûr de vouloir supprimer le badge "${selectedBadge?.name}" ?`}
               {actionType === "deleteAssignment" && `Êtes-vous sûr de vouloir supprimer l'attribution du badge "${selectedAssignment?.badgeName}" à "${selectedAssignment?.userName}" ?`}
-              {actionType === "approveRequest" && `Êtes-vous sûr de vouloir approuver la demande de "${selectedBusinessRequest?.companyName}" ?`}
-              {actionType === "rejectRequest" && `Êtes-vous sûr de vouloir rejeter la demande de "${selectedBusinessRequest?.companyName}" ?`}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -853,31 +596,6 @@ export default function BadgesManagement() {
       </Dialog>
     </div>
   );
-}
-
-function BusinessStatusBadge({ status }) {
-  switch (status) {
-    case "pending":
-      return (
-        <span className="px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-800">
-          En attente
-        </span>
-      );
-    case "approved":
-      return (
-        <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-          Approuvée
-        </span>
-      );
-    case "rejected":
-      return (
-        <span className="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
-          Rejetée
-        </span>
-      );
-    default:
-      return null;
-  }
 }
 
 function formatDate(dateString) {
