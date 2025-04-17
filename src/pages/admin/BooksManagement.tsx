@@ -28,6 +28,10 @@ export default function BooksManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState("");
 
   const { toast } = useToast();
 
@@ -413,6 +417,6 @@ function StatusBadge({ status }) {
 }
 
 function formatDate(dateString) {
-  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

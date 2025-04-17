@@ -34,6 +34,12 @@ export default function ReportsManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [statusFilter, setStatusFilter] = useState("pending");
+  
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const [messageToAuthor, setMessageToAuthor] = useState("");
 
   const { toast } = useToast();
 
@@ -368,6 +374,6 @@ function StatusBadge({ status }) {
 }
 
 function formatDate(dateString) {
-  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

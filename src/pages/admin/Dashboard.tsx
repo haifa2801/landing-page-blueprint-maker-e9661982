@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BookText, DollarSign, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -164,6 +165,6 @@ function RecentActivityCard({ title, items, type, isLoading }) {
 
 // Fonction pour formater les dates
 function formatDate(dateString) {
-  const options = { year: 'numeric' as const, month: 'long' as const, day: 'numeric' as const };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }
