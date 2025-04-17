@@ -88,7 +88,7 @@ export default function ReportsManagement() {
       
       toast({
         title: "Livre masqué",
-        description: `"${selectedReport.bookTitle}" a été masqué et le signalement a été résolu`,
+        description: `"${selectedReport.bookTitle}" a été masqué et le signalement a été résolu",
       });
     } else if (actionType === "dismiss") {
       setReports(reports.map(r => 
@@ -374,6 +374,6 @@ function StatusBadge({ status }) {
 }
 
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

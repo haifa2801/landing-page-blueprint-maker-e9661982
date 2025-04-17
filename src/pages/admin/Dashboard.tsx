@@ -163,8 +163,8 @@ function RecentActivityCard({ title, items, type, isLoading }) {
   );
 }
 
-// Fonction pour formater les dates
+// Fonction pour formater les dates - Fixed with correct type for DateTimeFormatOptions
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }

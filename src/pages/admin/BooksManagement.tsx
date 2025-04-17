@@ -417,6 +417,6 @@ function StatusBadge({ status }) {
 }
 
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }
