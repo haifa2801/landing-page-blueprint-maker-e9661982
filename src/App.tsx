@@ -13,6 +13,16 @@ import EbookCategories from "./pages/EbookCategories";
 import AudiobookCategories from "./pages/AudiobookCategories";
 import CategoryPage from "./pages/CategoryPage";
 
+// Pages admin
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import UsersManagement from "./pages/admin/UsersManagement";
+import BooksManagement from "./pages/admin/BooksManagement";
+import TransactionsManagement from "./pages/admin/TransactionsManagement";
+import ReportsManagement from "./pages/admin/ReportsManagement";
+import BadgesManagement from "./pages/admin/BadgesManagement";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -23,13 +33,26 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Routes publiques */}
             <Route path="/" element={<Index />} />
             <Route path="/book/:id" element={<BookDetail />} />
             <Route path="/author/:authorId" element={<AuthorPage />} />
             <Route path="/categories/ebooks" element={<EbookCategories />} />
             <Route path="/categories/audiobooks" element={<AudiobookCategories />} />
             <Route path="/category/:type/:categoryName" element={<CategoryPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* Routes admin */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="users" element={<UsersManagement />} />
+              <Route path="books" element={<BooksManagement />} />
+              <Route path="transactions" element={<TransactionsManagement />} />
+              <Route path="reports" element={<ReportsManagement />} />
+              <Route path="badges" element={<BadgesManagement />} />
+            </Route>
+            
+            {/* Route 404 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
