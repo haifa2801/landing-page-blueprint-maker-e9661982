@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +13,17 @@ import EbookCategories from "./pages/EbookCategories";
 import AudiobookCategories from "./pages/AudiobookCategories";
 import CategoryPage from "./pages/CategoryPage";
 import WriterLayout from "./components/admin/WriterLayout";
+
+// Pages admin
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import WriterDashboard from "./pages/admin/WriterDashboard";
+import UsersManagement from "./pages/admin/UsersManagement";
+import BooksManagement from "./pages/admin/BooksManagement";
+import TransactionsManagement from "./pages/admin/TransactionsManagement";
+import ReportsManagement from "./pages/admin/ReportsManagement";
+import BadgesManagement from "./pages/admin/BadgesManagement";
 
 const queryClient = new QueryClient();
 
