@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,17 +11,7 @@ import AuthorPage from "./pages/AuthorPage";
 import EbookCategories from "./pages/EbookCategories";
 import AudiobookCategories from "./pages/AudiobookCategories";
 import CategoryPage from "./pages/CategoryPage";
-
-// Pages admin
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminLayout from "./components/admin/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
-import WriterDashboard from "./pages/admin/WriterDashboard";
-import UsersManagement from "./pages/admin/UsersManagement";
-import BooksManagement from "./pages/admin/BooksManagement";
-import TransactionsManagement from "./pages/admin/TransactionsManagement";
-import ReportsManagement from "./pages/admin/ReportsManagement";
-import BadgesManagement from "./pages/admin/BadgesManagement";
+import WriterLayout from "./components/admin/WriterLayout";
 
 const queryClient = new QueryClient();
 
@@ -46,12 +35,16 @@ const App = () => (
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
-              <Route path="writer-dashboard" element={<WriterDashboard />} />
               <Route path="users" element={<UsersManagement />} />
               <Route path="books" element={<BooksManagement />} />
               <Route path="transactions" element={<TransactionsManagement />} />
               <Route path="reports" element={<ReportsManagement />} />
               <Route path="badges" element={<BadgesManagement />} />
+            </Route>
+
+            {/* Espace écrivain séparé */}
+            <Route path="/writer-dashboard" element={<WriterLayout />}>
+              <Route index element={<WriterDashboard />} />
             </Route>
             
             {/* Route 404 */}
