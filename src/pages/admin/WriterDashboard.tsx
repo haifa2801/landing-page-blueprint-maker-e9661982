@@ -32,7 +32,8 @@ import {
   ResponsiveContainer, 
   Tooltip, 
   XAxis, 
-  YAxis
+  YAxis,
+  Cell
 } from "recharts";
 
 // Données fictives pour la démonstration
@@ -285,10 +286,7 @@ export default function WriterDashboard() {
                       dataKey="value"
                     >
                       {data.geographicData.map((entry, index) => (
-                        <Pie 
-                          key={`cell-${index}`} 
-                          fill={COLORS[index % COLORS.length]} 
-                        />
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                     <ChartTooltip content={<ChartTooltipContent />} />
@@ -353,10 +351,7 @@ export default function WriterDashboard() {
                       dataKey="value"
                     >
                       {data.readerDemographics.map((entry, index) => (
-                        <Pie 
-                          key={`cell-${index}`} 
-                          fill={COLORS[index % COLORS.length]} 
-                        />
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                     <ChartTooltip content={<ChartTooltipContent />} />
