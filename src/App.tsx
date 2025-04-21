@@ -54,9 +54,10 @@ const App = () => (
               <Route path="badges" element={<BadgesManagement />} />
             </Route>
 
-            {/* Espace écrivain séparé */}
+            {/* Espace écrivain avec sa propre route racine */}
             <Route path="/writer-dashboard" element={<WriterLayout />}>
               <Route index element={<WriterDashboard />} />
+              {/* Les autres routes spécifiques à l'écrivain seront ajoutées ici */}
             </Route>
             
             {/* Route 404 */}
