@@ -17,6 +17,7 @@ import CategoryPage from "./pages/CategoryPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
+import WriterDashboard from "./pages/admin/WriterDashboard";
 import UsersManagement from "./pages/admin/UsersManagement";
 import BooksManagement from "./pages/admin/BooksManagement";
 import TransactionsManagement from "./pages/admin/TransactionsManagement";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
+              <Route path="writer-dashboard" element={<WriterDashboard />} />
               <Route path="users" element={<UsersManagement />} />
               <Route path="books" element={<BooksManagement />} />
               <Route path="transactions" element={<TransactionsManagement />} />
