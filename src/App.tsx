@@ -1,10 +1,10 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
+import { OnboardingFlow } from "./components/onboarding/OnboardingFlow";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import BookDetail from "./pages/BookDetail";
@@ -37,6 +37,7 @@ const App = () => (
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<Index />} />
+            <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/book/:id" element={<BookDetail />} />
             <Route path="/author/:authorId" element={<AuthorPage />} />
             <Route path="/categories/ebooks" element={<EbookCategories />} />
