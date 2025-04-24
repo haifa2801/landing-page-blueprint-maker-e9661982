@@ -5,22 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 
-interface GenreSelectionStepProps {
-  selectedGenres: string[];
-  onGenreToggle: (genre: string) => void;
+interface UserInterestsStepProps {
+  selectedInterests: string[];
+  onInterestsChange: (interests: string[]) => void;
 }
 
-export function GenreSelectionStep({
-  selectedGenres,
-  onGenreToggle,
-}: GenreSelectionStepProps) {
-  const allGenres = [
-    "Roman", "Science-Fiction", "Fantasy", 
-    "Policier", "Thriller", "Romance", 
-    "Historique", "Biographie", "Poésie",
-    "Développement personnel", "Business", "Jeunesse",
-    "Bande dessinée", "Nouvelles", "Essai", 
-    "Philosophie", "Art", "Voyage"
+export function UserInterestsStep({
+  selectedInterests,
+  onInterestsChange,
+}: UserInterestsStepProps) {
+  const allInterests = [
+    "Science-Fiction", "Développement personnel", 
+    "Voyage", "Technologie", "Art", 
+    "Cuisine", "Histoire", "Philosophie", 
+    "Entrepreneuriat", "Bien-être", "Écologie", 
+    "Psychologie", "Innovation", "Culture"
   ];
 
   const containerVariants = {
@@ -45,7 +44,7 @@ export function GenreSelectionStep({
         animate={{ opacity: 1 }}
         className="text-center mb-4"
       >
-        Sélectionnez vos genres littéraires préférés
+        Sélectionnez vos centres d'intérêt pour personnaliser votre expérience
       </motion.p>
 
       <motion.div
@@ -54,19 +53,23 @@ export function GenreSelectionStep({
         animate="show"
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"
       >
-        {allGenres.map((genre) => {
-          const isSelected = selectedGenres.includes(genre);
+        {allInterests.map((interest) => {
+          const isSelected = selectedInterests.includes(interest);
           return (
-            <motion.div key={genre} variants={itemVariants}>
+            <motion.div key={interest} variants={itemVariants}>
               <Button
                 variant={isSelected ? "default" : "outline"}
                 size="sm"
-                onClick={() => onGenreToggle(genre)}
+                onClick={() => onInterestsChange(
+                  isSelected 
+                    ? selectedInterests.filter(i => i !== interest)
+                    : [...selectedInterests, interest]
+                )}
                 className={`h-auto py-3 px-4 w-full justify-between ${
                   isSelected ? "bg-primary text-primary-foreground" : ""
                 }`}
               >
-                <span>{genre}</span>
+                <span>{interest}</span>
                 {isSelected && <Check className="h-4 w-4 ml-1" />}
               </Button>
             </motion.div>
@@ -81,12 +84,12 @@ export function GenreSelectionStep({
         className="pt-4 flex flex-wrap gap-2"
       >
         <p className="text-sm mr-2">Sélectionnés:</p>
-        {selectedGenres.length === 0 ? (
-          <span className="text-sm text-muted-foreground">Aucun genre sélectionné</span>
+        {selectedInterests.length === 0 ? (
+          <span className="text-sm text-muted-foreground">Aucun centre d'intérêt sélectionné</span>
         ) : (
-          selectedGenres.map((genre) => (
-            <Badge key={genre} variant="secondary" className="text-xs">
-              {genre}
+          selectedInterests.map((interest) => (
+            <Badge key={interest} variant="secondary" className="text-xs">
+              {interest}
             </Badge>
           ))
         )}

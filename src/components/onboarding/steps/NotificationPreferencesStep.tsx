@@ -2,14 +2,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 interface NotificationPreferencesStepProps {
   emailNotifications: boolean;
   pushNotifications: boolean;
   onEmailNotificationsChange: (enabled: boolean) => void;
   onPushNotificationsChange: (enabled: boolean) => void;
-  userRole: "reader" | "writer" | "publisher";
 }
 
 export function NotificationPreferencesStep({
@@ -17,7 +15,6 @@ export function NotificationPreferencesStep({
   pushNotifications,
   onEmailNotificationsChange,
   onPushNotificationsChange,
-  userRole,
 }: NotificationPreferencesStepProps) {
   return (
     <motion.div
@@ -36,9 +33,7 @@ export function NotificationPreferencesStep({
           <div>
             <h4 className="font-medium">Notifications par email</h4>
             <p className="text-sm text-muted-foreground">
-              {userRole === "reader" && "Recevez des recommandations de lecture et des alertes sur les nouveaux livres"}
-              {userRole === "writer" && "Recevez des alertes sur les ventes, commentaires et performances de vos œuvres"}
-              {userRole === "publisher" && "Recevez des alertes sur les ventes, rapports financiers et performances du catalogue"}
+              Recevez des recommandations personnalisées et des alertes
             </p>
           </div>
           <Switch
@@ -51,9 +46,7 @@ export function NotificationPreferencesStep({
           <div>
             <h4 className="font-medium">Notifications push</h4>
             <p className="text-sm text-muted-foreground">
-              {userRole === "reader" && "Recevez des notifications instantanées sur votre appareil"}
-              {userRole === "writer" && "Soyez alerté(e) immédiatement des interactions avec vos œuvres"}
-              {userRole === "publisher" && "Recevez des alertes en temps réel sur l'activité de votre catalogue"}
+              Recevez des notifications instantanées sur votre appareil
             </p>
           </div>
           <Switch
