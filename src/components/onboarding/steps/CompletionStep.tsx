@@ -3,70 +3,26 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight } from "lucide-react";
-import type { UserRole } from "@/types/onboarding";
 
 interface CompletionStepProps {
-  userRole: UserRole;
   onStartJourney: () => void;
 }
 
-export function CompletionStep({ userRole, onStartJourney }: CompletionStepProps) {
-  let nextDestination = "";
-  let features: { title: string; description: string }[] = [];
-
-  switch (userRole) {
-    case "reader":
-      nextDestination = "votre bibliothèque personnalisée";
-      features = [
-        {
-          title: "Découvertes personnalisées",
-          description: "Des recommandations basées sur vos goûts littéraires"
-        },
-        {
-          title: "Outils de lecture avancés",
-          description: "Marque-pages, surlignage, notes et annotations"
-        },
-        {
-          title: "Communauté de lecteurs",
-          description: "Partagez vos avis et découvrez les recommandations d'autres lecteurs"
-        }
-      ];
-      break;
-    case "writer":
-      nextDestination = "votre tableau de bord d'écrivain";
-      features = [
-        {
-          title: "Outils de publication",
-          description: "Tout ce dont vous avez besoin pour publier et gérer vos œuvres"
-        },
-        {
-          title: "Analyses de performance",
-          description: "Suivez les lectures, téléchargements et revenus en temps réel"
-        },
-        {
-          title: "Protection contre le piratage",
-          description: "Vos œuvres sont protégées par nos technologies avancées"
-        }
-      ];
-      break;
-    case "publisher":
-      nextDestination = "votre tableau de bord d'éditeur";
-      features = [
-        {
-          title: "Gestion de catalogue",
-          description: "Outils avancés pour gérer votre catalogue complet"
-        },
-        {
-          title: "Analytics détaillés",
-          description: "Données précises sur les performances par auteur, genre et format"
-        },
-        {
-          title: "Distribution optimisée",
-          description: "Solutions pour maximiser la diffusion et les ventes"
-        }
-      ];
-      break;
-  }
+export function CompletionStep({ onStartJourney }: CompletionStepProps) {
+  const features = [
+    {
+      title: "Découvertes personnalisées",
+      description: "Des recommandations basées sur vos goûts littéraires"
+    },
+    {
+      title: "Outils de lecture avancés",
+      description: "Marque-pages, surlignage, notes et annotations"
+    },
+    {
+      title: "Communauté de lecteurs",
+      description: "Partagez vos avis et découvrez les recommandations d'autres lecteurs"
+    }
+  ];
 
   return (
     <motion.div
@@ -88,7 +44,7 @@ export function CompletionStep({ userRole, onStartJourney }: CompletionStepProps
       <div>
         <h3 className="text-2xl font-bold">Félicitations !</h3>
         <p className="text-muted-foreground mt-2">
-          Votre profil est maintenant configuré. Vous êtes prêt(e) à commencer.
+          Votre profil est maintenant configuré. Vous êtes prêt(e) à commencer votre voyage littéraire.
         </p>
       </div>
 
@@ -124,7 +80,7 @@ export function CompletionStep({ userRole, onStartJourney }: CompletionStepProps
         transition={{ delay: 0.6 }}
       >
         <Button onClick={onStartJourney} size="lg" className="mt-4">
-          Découvrir {nextDestination}
+          Découvrir votre bibliothèque personnalisée
           <ChevronRight className="ml-2 h-4 w-4" />
         </Button>
       </motion.div>

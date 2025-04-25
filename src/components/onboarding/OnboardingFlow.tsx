@@ -6,6 +6,7 @@ import { OnboardingCard } from "./OnboardingCard";
 import { WelcomeStep } from "./steps/WelcomeStep";
 import { GenreSelectionStep } from "./steps/GenreSelectionStep";
 import { NotificationPreferencesStep } from "./steps/NotificationPreferencesStep";
+import { ReaderQuestionsStep } from "./steps/ReaderQuestionsStep";
 import { UserInterestsStep } from "./steps/UserInterestsStep";
 import { CompletionStep } from "./steps/CompletionStep";
 import { useToast } from "@/hooks/use-toast";
@@ -15,12 +16,17 @@ const steps = [
   {
     id: "welcome",
     title: "Bienvenue sur TEPTAC SERVICES",
-    description: "Découvrez une expérience personnalisée de lecture et de création."
+    description: "Découvrez une expérience personnalisée de lecture."
   },
   {
     id: "interests",
     title: "Vos centres d'intérêt",
     description: "Dites-nous ce qui vous passionne"
+  },
+  {
+    id: "reader-questions",
+    title: "Vos habitudes de lecture",
+    description: "Aidez-nous à mieux vous connaître"
   },
   {
     id: "genres",
@@ -58,7 +64,6 @@ export function OnboardingFlow() {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   const handleNext = () => {
-    // Validation for specific steps
     if (currentStep === 1 && preferences.readingInterests?.length === 0) {
       toast({
         title: "Veuillez sélectionner au moins un centre d'intérêt",
@@ -67,7 +72,7 @@ export function OnboardingFlow() {
       return;
     }
 
-    if (currentStep === 2 && preferences.favoriteGenres.length === 0) {
+    if (currentStep === 3 && preferences.favoriteGenres.length === 0) {
       toast({
         title: "Veuillez sélectionner au moins un genre",
         variant: "destructive",
@@ -127,6 +132,16 @@ export function OnboardingFlow() {
           <UserInterestsStep
             selectedInterests={preferences.readingInterests || []}
             onInterestsChange={handleInterestsChange}
+          />
+        );
+      
+      case "reader-questions":
+        return (
+          <ReaderQuestionsStep
+            readingHabits={preferences.goals || []}
+            onReadingHabitsChange={(habits) => setPreferences(prev => ({ ...prev, goals: habits }))}
+            preferredFormats={preferences.preferredFormats || []}
+            onPreferredFormatsChange={(formats) => setPreferences(prev => ({ ...prev, preferredFormats: formats }))}
           />
         );
       
